@@ -3,7 +3,7 @@ set(CMAKE_C_COMPILER "C:/msys64/mingw64/bin/gcc.exe")
 set(CMAKE_CXX_COMPILER "C:/msys64/mingw64/bin/g++.exe")
 
 cmake_minimum_required(VERSION 3.24...3.30)
-project(snake-game-cpp)
+project(conways-game-of-life-cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS ON)
@@ -25,31 +25,52 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(raylib)
 
-# Our Project
-add_executable(${PROJECT_NAME} src/main.cpp)
-add_subdirectory(src)
+# =========================
+# Project Configuration
+# =========================
+
+# 1. Initialize the executable target blank
+add_executable(${PROJECT_NAME})
+
+# 2. Explicitly list all your .cpp and .hpp files here
+target_sources(${PROJECT_NAME} PRIVATE
+    src/main.cpp
+    # Add other source files as they are created:
+    # src/player.cpp
+    # src/grid.cpp
+
+    # Listing headers here makes them show up in the VS Code file tree
+    # include/game/player.hpp
+    # include/game/grid.hpp
+)
+
+# 3. Expose the 'include' directory so you don't need messy "../../include" relative paths
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
+# ================
+# Assets & Linking
+# ================
+
+# Cleaned up asset copying to copy from the root '/assets' folder directly to the build directory
 if ("${PLATFORM}" STREQUAL "Web")
     add_custom_command(
         TARGET ${PROJECT_NAME} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/src/assets
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
     )
-    #DEPENDS ${PROJECT_NAME}
 else()
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/src/assets
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
     )
-    #DEPENDS ${PROJECT_NAME}
 endif()
 
-#set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib)
+# Link raylib and platform dependencies
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
 # Web Configurations
 if ("${PLATFORM}" STREQUAL "Web")
