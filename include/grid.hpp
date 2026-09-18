@@ -49,7 +49,9 @@ public:
 
     // Deconstructor (std::vector handles its own memory, so a deconstructor isn't needed. May write one anyway.)
 
-    // Getters
+    // =================
+    // ==== Getters ====
+    // =================
 
     // Get the current matrix state
     std::vector<std::vector<Grid::Cell>> getCurrMatrix();
@@ -63,12 +65,16 @@ public:
     // Get a specific Cell's state
     bool getCellStateAt(const unsigned int x, const unsigned int y) const;
 
-    // Setters
+    // =================
+    // ==== Setters ====
+    // =================
     
     // Flips the given Cell's state (alive/dead | on/off | true/false)
     void flipCellState(Grid::Cell &cell);
-    
-    // Methods
+
+    // =================
+    // ==== Methods ====
+    // =================
 
     // Advance the Grid by one frame
     void UpdateCurrentGrid();
