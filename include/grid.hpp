@@ -5,8 +5,8 @@
 
 class Grid
 {
-// MUST put private first because some Grid methods rely on subclass Cell
-// Cell must be defined before the Grid class can use it
+    // MUST put private first because some Grid methods rely on Cell subclass
+    // Cell must be defined before the Grid class can use it
 private:
     // Subclass: grid cell
     class Cell
@@ -37,22 +37,48 @@ private:
     const unsigned int NUM_ROWS = 10;
     const unsigned int NUM_COLS = 10;
 
-    // 2D vector of grid cells
-    std::vector<std::vector<Grid::Cell>> matrix;
+    // 2D vectors of grid cells
+    std::vector<std::vector<Grid::Cell>> currentMatrix; // Frame 0
+    std::vector<std::vector<Grid::Cell>> nextMatrix;    // Frame 1
+
+    // TODO: Rule list
 
 public:
     // Constructor
     Grid();
 
-    // Deconstructor (std::vector handles its own memory, so a deconstructor isn't needed)
+    // Deconstructor (std::vector handles its own memory, so a deconstructor isn't needed. May write one anyway.)
 
     // Getters
 
-    // Setters
+    // Get the current matrix state
+    std::vector<std::vector<Grid::Cell>> getCurrMatrix();
+    // Get the next matrix state
+    std::vector<std::vector<Grid::Cell>> getNextMatrix();
 
+    // Get a specific Cell, immutable
+    const Cell &getCellAt(const unsigned int x, const unsigned int y) const;
+    // Get a specific Cell, mutable
+    Cell &getCellAt(const unsigned int x, const unsigned int y);
+    // Get a specific Cell's state
+    bool getCellStateAt(const unsigned int x, const unsigned int y) const;
+
+    // Setters
+    
+    // Flips the given Cell's state (alive/dead | on/off | true/false)
+    void flipCellState(Grid::Cell &cell);
+    
     // Methods
-    void UpdateGrid();
+
+    // Advance the Grid by one frame
+    void UpdateCurrentGrid();
+    // Create what the Grid's next frame will be
+    void UpdateNextGrid();
+    // Draw the current Grid visually
     void Draw();
+    // Make all Cells in the Grid dead/off
+    void ResetGrid();
+    // Check specific Cell against Grid's ruleset
     bool shouldCellSwitchState(const Grid::Cell &cell) const;
 };
 
