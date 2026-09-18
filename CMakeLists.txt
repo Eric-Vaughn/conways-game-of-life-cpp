@@ -35,6 +35,8 @@ add_executable(${PROJECT_NAME})
 # 2. Explicitly list all your .cpp and .hpp files here
 target_sources(${PROJECT_NAME} PRIVATE
     src/main.cpp
+    src/grid.cpp
+    include/grid.hpp
     # Add other source files as they are created:
     # src/player.cpp
     # src/grid.cpp
