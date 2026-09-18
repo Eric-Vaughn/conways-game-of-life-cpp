@@ -5,12 +5,8 @@
 
 class Grid
 {
-public:
-    // Constructor
-    // Deconstructor (std::vector handles its own memory, so a deconstructor isn't needed)
-    // Getters
-    // Setters
-    // Methods
+// MUST put private first because some Grid methods rely on subclass Cell
+// Cell must be defined before the Grid class can use it
 private:
     // Subclass: grid cell
     class Cell
@@ -43,6 +39,21 @@ private:
 
     // 2D vector of grid cells
     std::vector<std::vector<Grid::Cell>> matrix;
+
+public:
+    // Constructor
+    Grid();
+
+    // Deconstructor (std::vector handles its own memory, so a deconstructor isn't needed)
+
+    // Getters
+
+    // Setters
+
+    // Methods
+    void UpdateGrid();
+    void Draw();
+    bool shouldCellSwitchState(const Grid::Cell &cell) const;
 };
 
 #endif
